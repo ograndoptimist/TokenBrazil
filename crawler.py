@@ -3,16 +3,17 @@
     garanting quality.
 """
 import typing
+import requests
 
 
 class NodeTree(object):
-        def __init__(self, url=None):
-            self._child_left = None
-            self._child_right = None
-            self._url = None
-            self._content = None
-            self._hash = None
-            self._number_node = 0
+    def __init__(self, url=None):
+        self.child_left = None
+        self.child_right = None
+        self.url = url
+        self.content = None
+        self.hash = None
+        self.number_node = 0
 
             
 class CrawlerTree(NodeTree):
@@ -22,34 +23,42 @@ class CrawlerTree(NodeTree):
     """
     def __init__(self):
         super().__init__()
-        self._root = NodeTree()
+        self.root = NodeTree()
 
     def number_of_nodes(self):
-        return self._number_node
+        return self.number_node
         
     def insert_node(self, url):
-        if self._root == None:
-            self._root = node
-            self._url = url
-            self._hash = -1212
-            return self._url
-
-        if(self.search_node(node, url) == None):
-            node = NodeTree()
-            self._number_node += 1
+        if self.root.url is None:
+            self.root.url = url
+        elif self.search_node(self.root, url) is None:
+            node = NodeTree(url)
+            parent = CrawlerTree._search_node(self.root, url)
+            if parent.url > node.url:
+                parent.child_left = node
+            elif parent.url < node.url:
+                parent._child_right = node
+            self.number_node += 1
         else:
-            raise Exception("URL already on the tree.")
+            return None
+
+    @staticmethod
+    def _search_node(node, url):
+        if node.child_left is not None and node.url > node.child_left.url:
+            CrawlerTree._search_node(node.child_left, url)
+        elif node.child_right is not None and node.url < node.child_right.url:
+            CrawlerTree._search_node(node.child_right, url)
+        return node
 
     def search_node(self, node, url):
-        if node == None:
-            raise Exception("Parent is empty")
-
-        if node._url == url:
+        if node.url == url:
             return node
-        elif node._child_left is not None and node._url < node._child_left._url:
-            self.search_node(node._child_left)
-        elif node._child_right is not None and node._url < node._child_right._url:
-            self.search_node(node._child_right)
+        elif node.child_left is not None and node.url < node.child_left.url:
+            self.search_node(node.child_left, url)
+        elif node.child_right is not None and node.url < node.child_right.url:
+            self.search_node(node.child_right, url)
+        else:
+            return None
 
     def _calc_hash(self, node):
         pass
