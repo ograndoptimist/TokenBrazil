@@ -9,12 +9,13 @@ class CrawlerTree(NodeTree):
     """
         We aim to build a beautiful Tree of text's documents from the internet.
         So, expect each node to be a document containing portuguese text.
+        CrawlerTree is a Binary Search Tree (BST) data structure.
     """
     def __init__(self):
         super().__init__()
         self.root = NodeTree()
 
-    def number_of_nodes(self) -> int:
+    def number_nodes(self) -> int:
         return self.number_node
 
     def __set_root_node(self, item: int) -> None:
@@ -29,14 +30,14 @@ class CrawlerTree(NodeTree):
         parent = self._search_node(self.root, item)
 
         if parent.item > node.item:
-            parent.child_left = node
+            parent.left = node
         elif parent.item < node.item:
-            parent._child_right = node
+            parent.right = node
 
         self.number_node += 1
         return True
         
-    def insert_node(self, item: int) -> bool:
+    def insert_item(self, item: int) -> bool:
         if self.root.item is None:
             self.__set_root_node(item)
         elif not self.search_item(item):
@@ -47,10 +48,10 @@ class CrawlerTree(NodeTree):
     def _search_node(self, node: NodeTree, item: int) -> NodeTree:
         if node.item == item:
             return node
-        if node.child_left is not None and node.item > item:
-            return self._search_node(node.child_left, item)
-        elif node.child_right is not None and node.url < item:
-            return self._search_node(node.child_right, item)
+        elif node.left is not None and node.item > item:
+            return self._search_node(node.left, item)
+        elif node.right is not None and node.item < item:
+            return self._search_node(node.right, item)
 
         return node
 
