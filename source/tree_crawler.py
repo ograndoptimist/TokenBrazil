@@ -17,7 +17,7 @@ class CrawlerTree(NodeTree):
     def number_of_nodes(self) -> int:
         return self.number_node
 
-    def __set_root_node(self, item):
+    def __set_root_node(self, item: int) -> None:
         assert self.root.item is None
 
         if self.root.item is None:
