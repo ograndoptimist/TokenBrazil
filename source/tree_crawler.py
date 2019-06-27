@@ -2,20 +2,9 @@
     The goal: to build the biggest token dictionary in Brazilian Portuguese, and the most important,
     garanting quality.
 """
-import typing
-import requests
+from node_tree import NodeTree
 
 
-class NodeTree(object):
-    def __init__(self, url=None):
-        self.child_left = None
-        self.child_right = None
-        self.url = url
-        self.content = None
-        self.hash = None
-        self.number_node = 0
-
-            
 class CrawlerTree(NodeTree):
     """
         We aim to build a beautiful Tree of text's documents from the internet.
@@ -27,34 +16,46 @@ class CrawlerTree(NodeTree):
 
     def number_of_nodes(self) -> int:
         return self.number_node
-        
-    def insert_node(self, url: str) -> bool:
-        if self.root.url is None:
-            self.root.url = url
-            return True
-        elif not self.search_node(url):
-            node = NodeTree(url)
-            parent = self._search_node(self.root, url)
-            if parent.url > node.url:
-                parent.child_left = node
-            elif parent.url < node.url:
-                parent._child_right = node
+
+    def __set_root_node(self, item):
+        assert self.root.item is None
+
+        if self.root.item is None:
+            self.root.item = item
             self.number_node += 1
-            return True
+
+    def _create_node(self, item: int) -> bool:
+        node = NodeTree(item)
+        parent = self._search_node(self.root, item)
+
+        if parent.item > node.item:
+            parent.child_left = node
+        elif parent.item < node.item:
+            parent._child_right = node
+
+        self.number_node += 1
+        return True
+        
+    def insert_node(self, item: int) -> bool:
+        if self.root.item is None:
+            self.__set_root_node(item)
+        elif not self.search_item(item):
+            return self._create_node(item)
         else:
             return False
 
-    def _search_node(self, node: NodeTree, url: str) -> NodeTree:
-        if node.url == url:
+    def _search_node(self, node: NodeTree, item: int) -> NodeTree:
+        if node.item == item:
             return node
-        if node.child_left is not None and node.url > url:
-            self._search_node(node.child_left, url)
-        elif node.child_right is not None and node.url < url:
-            self._search_node(node.child_right, url)
+        if node.child_left is not None and node.item > item:
+            return self._search_node(node.child_left, item)
+        elif node.child_right is not None and node.url < item:
+            return self._search_node(node.child_right, item)
+
         return node
 
-    def search_node(self, url: str) -> bool:
-        if self._search_node(self.root, url).url == url:
+    def search_item(self, item: int) -> bool:
+        if self._search_node(self.root, item).item == item:
             return True
         else:
             return False
