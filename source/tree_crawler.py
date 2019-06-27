@@ -18,48 +18,45 @@ class CrawlerTree(NodeTree):
     def number_nodes(self) -> int:
         return self.number_node
 
-    def __set_root_node(self, item: int) -> None:
-        assert self.root.item is None
+    def __set_root_node(self, url: str) -> None:
+        assert self.root.url is None
 
-        if self.root.item is None:
-            self.root.item = item
+        if self.root.url is None:
+            self.root.url = url
             self.number_node += 1
 
-    def _create_node(self, item: int) -> bool:
-        node = NodeTree(item)
-        parent = self._search_node(self.root, item)
+    def _create_node(self, url: str) -> bool:
+        node = NodeTree(url)
+        parent = self._search_node(self.root, url)
 
-        if parent.item > node.item:
+        if parent.url > node.url:
             parent.left = node
-        elif parent.item < node.item:
+        elif parent.url < node.url:
             parent.right = node
 
         self.number_node += 1
         return True
         
-    def insert_item(self, item: int) -> bool:
-        if self.root.item is None:
-            self.__set_root_node(item)
-        elif not self.search_item(item):
-            return self._create_node(item)
+    def insert_url(self, url: str) -> bool:
+        if self.root.url is None:
+            self.__set_root_node(url)
+        elif not self.search_url(url):
+            return self._create_node(url)
         else:
             return False
 
-    def _search_node(self, node: NodeTree, item: int) -> NodeTree:
-        if node.item == item:
+    def _search_node(self, node: NodeTree, url: str) -> NodeTree:
+        if node.url == url:
             return node
-        elif node.left is not None and node.item > item:
-            return self._search_node(node.left, item)
-        elif node.right is not None and node.item < item:
-            return self._search_node(node.right, item)
+        elif node.left is not None and node.url > url:
+            return self._search_node(node.left, url)
+        elif node.right is not None and node.url < url:
+            return self._search_node(node.right, url)
 
         return node
 
-    def search_item(self, item: int) -> bool:
-        if self._search_node(self.root, item).item == item:
+    def search_url(self, url: str) -> bool:
+        if self._search_node(self.root, url).url == url:
             return True
         else:
             return False
-
-    def _calc_hash(self, node):
-        pass
