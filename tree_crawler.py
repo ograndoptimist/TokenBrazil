@@ -25,40 +25,39 @@ class CrawlerTree(NodeTree):
         super().__init__()
         self.root = NodeTree()
 
-    def number_of_nodes(self):
+    def number_of_nodes(self) -> int:
         return self.number_node
         
-    def insert_node(self, url):
+    def insert_node(self, url: str) -> bool:
         if self.root.url is None:
             self.root.url = url
-        elif self.search_node(self.root, url) is None:
+            return True
+        elif not self.search_node(url):
             node = NodeTree(url)
-            parent = CrawlerTree._search_node(self.root, url)
+            parent = self._search_node(self.root, url)
             if parent.url > node.url:
                 parent.child_left = node
             elif parent.url < node.url:
                 parent._child_right = node
             self.number_node += 1
+            return True
         else:
-            return None
+            return False
 
-    @staticmethod
-    def _search_node(node, url):
-        if node.child_left is not None and node.url > node.child_left.url:
-            CrawlerTree._search_node(node.child_left, url)
-        elif node.child_right is not None and node.url < node.child_right.url:
-            CrawlerTree._search_node(node.child_right, url)
-        return node
-
-    def search_node(self, node, url):
+    def _search_node(self, node: NodeTree, url: str) -> NodeTree:
         if node.url == url:
             return node
-        elif node.child_left is not None and node.url < node.child_left.url:
-            self.search_node(node.child_left, url)
-        elif node.child_right is not None and node.url < node.child_right.url:
-            self.search_node(node.child_right, url)
+        if node.child_left is not None and node.url > url:
+            self._search_node(node.child_left, url)
+        elif node.child_right is not None and node.url < url:
+            self._search_node(node.child_right, url)
+        return node
+
+    def search_node(self, url: str) -> bool:
+        if self._search_node(self.root, url).url == url:
+            return True
         else:
-            return None
+            return False
 
     def _calc_hash(self, node):
         pass
