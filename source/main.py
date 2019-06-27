@@ -1,13 +1,14 @@
-from crawler import CrawlerTree
+from source.tree_crawler import CrawlerTree
 import random
 
 
 def main(url_beggining="https://pt.wikipedia.org/wiki/Brasilac",
          ):
+    global documentsTree
     documentsTree = CrawlerTree()
 
     items = []
-    for k in range(100):
+    for k in range(5):
         items.append(random.randint(0, 500))
 
     for item in items:
