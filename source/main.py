@@ -12,12 +12,12 @@ def main():
 
     for item in items:
         print("item a se adicionar: ", item)
-        documentsTree.insert_item(item)
+        documentsTree.insert_url(item)
 
     print("Nós inseridos: {0}".format(documentsTree.number_nodes()))
 
     for item in items:
-        print(documentsTree.search_item(item))
+        print(documentsTree.search_url(item))
 
     
 
