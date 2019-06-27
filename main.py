@@ -1,4 +1,4 @@
-from crawler import CrawlerTree
+from tree_crawler import CrawlerTree
 import random
 
 
