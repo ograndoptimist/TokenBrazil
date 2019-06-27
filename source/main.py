@@ -1,9 +1,8 @@
-from source.tree_crawler import CrawlerTree
+from tree_crawler import CrawlerTree
 import random
 
 
-def main(url_beggining="https://pt.wikipedia.org/wiki/Brasilac",
-         ):
+def main():
     global documentsTree
     documentsTree = CrawlerTree()
 
@@ -13,9 +12,13 @@ def main(url_beggining="https://pt.wikipedia.org/wiki/Brasilac",
 
     for item in items:
         print("item a se adicionar: ", item)
-        documentsTree.insert_node(url=item)
+        documentsTree.insert_node(item)
 
     print("Nós inseridos: {0}".format(documentsTree.number_of_nodes()))
+
+    for item in items:
+        print(documentsTree.search_item(item))
+
     
 
 if __name__ == '__main__':
